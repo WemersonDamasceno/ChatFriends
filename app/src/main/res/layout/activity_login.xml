@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.LoginActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorBranco">
+
+        <RelativeLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="fitCenter"
+                android:background="@color/colorBranco"
+                android:src="@drawable/logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/imageView">
+
+
+
+
+                <EditText
+                    android:id="@+id/edEmailLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:textColor="@color/colorPreto"
+                    android:hint="@string/email"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp"
+                    android:background="@drawable/borda_arrendondados"
+                    android:backgroundTint="@color/colorCinza"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    tools:ignore="RtlSymmetry" />
+
+               <EditText
+                   android:id="@+id/edSenhaLogin"
+                   android:layout_width="match_parent"
+                   android:hint="@string/senha"
+                   android:layout_height="40dp"
+                   android:textColor="@color/colorPreto"
+                   android:layout_marginTop="10dp"
+                   android:paddingStart="10dp"
+                   android:background="@drawable/borda_arrendondados"
+                   android:backgroundTint="@color/colorCinza"
+                   android:layout_marginStart="20dp"
+                   android:layout_marginEnd="20dp"
+                   tools:ignore="RtlSymmetry" />
+
+                <Button
+                    android:id="@+id/btnButtonLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/login"
+                    android:textColor="@color/colorBranco"
+                    android:background="@drawable/borda_arrendondados"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"/>
+
+
+                <TextView
+                    android:id="@+id/txtCriarConta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="@string/ainda_n_o_tem_conta_crie_uma_aqui"
+                    android:textColor="@color/colorAzul" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+
+
+</RelativeLayout>

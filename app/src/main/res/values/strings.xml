@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Chat Friends</string>
+    <string name="ic_home">ic_home</string>
+    <string name="ic_procurar">ic_procurar</string>
+    <string name="ic_notificacoes">ic_notificacoes</string>
+    <string name="ic_perfil">ic_perfil</string>
+    <string name="digite_sua_d_vida_aqui">Digite sua dúvida aqui:</string>
+    <string name="compartilhar">Compartilhar</string>
+    <string name="textoCriarPub">Aqui você pode compartilhar aquele material com meu amigo. 📚😊\n\nOu fazer perguntas sobre as disciplinas ou professores!🤓🤫\n\nPreencha o campo tag corretamente para ajudar seus amigos✏️✅️</string>
+    <string name="senha">Senha</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="ainda_n_o_tem_conta_crie_uma_aqui">Ainda não tem conta ? Crie uma aqui.</string>
+</resources>
