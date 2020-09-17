@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -119,24 +118,15 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
                             for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
                                 Usuario user = doc.toObject(Usuario.class);
                                 if(user.getIdUser().equals(FirebaseAuth.getInstance().getUid())){
-                                    if(user.getQtdAmigos() == 0){
-                                        bundle.putParcelable("user", userClicado);
-                                        intent = new Intent(getContext, PerfilActivity.class);
-                                        intent.putExtra("bundle", bundle);
-                                        getContext.startActivity(intent);
-                                    }else{
-                                        verficarSeSaoAmigos();
-                                    }
+                                    bundle.putParcelable("user", userClicado);
+                                    intent = new Intent(getContext, PerfilActivity.class);
+                                    intent.putExtra("bundle", bundle);
+                                    getContext.startActivity(intent);
                                 }
                             }
                         }
                     });
         }
-
-        private void verficarSeSaoAmigos() {
-
-        }
-
 
         @Override
         public void onClick(View v) {
