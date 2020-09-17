@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.chatfriends">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,19 +11,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.HomeActivity">
-        </activity>
-        <activity android:name=".view.LoginActivity">
+        <activity android:name=".view.MyPerfilActivity">
 
         </activity>
+        <activity android:name=".view.TrocaDeMensagensActivity" />
+        <activity android:name=".view.PerfilActivity" />
+        <activity android:name=".view.ProcurarActivity" />
+        <activity android:name=".view.HomeActivity" />
+        <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.CriarContaActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.LoginActivity"/>
+                android:value=".view.LoginActivity" />
         </activity>
         <activity android:name=".view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

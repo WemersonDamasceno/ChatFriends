@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.MyPerfilActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgPerfilPerfil"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_perfil"
+            app:civ_border_width="3dp"
+            android:layout_centerHorizontal="true"
+            app:civ_border_color="@color/colorAzul"
+            android:layout_marginTop="5dp"/>
+
+        <ImageView
+            android:id="@+id/imgTrocarFotoPerfil"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="-40dp"
+            android:layout_below="@+id/imgPerfilPerfil"
+            android:layout_toEndOf="@+id/imgPerfilPerfil"
+            android:src="@drawable/ic_camera" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/userMyPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wemerson Monteiro"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textSize="17sp"
+        android:textColor="@color/colorPreto"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/statusMyPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Status"
+        android:textColor="@color/colorPreto"
+        android:textStyle="italic"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/emailMyPerfil"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:text="wemersondamasceno7@gmail.com"
+        android:layout_gravity="center"
+        android:textColor="@color/colorPreto"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPreto"
+        android:text="Convites Pendentes"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvConvites"
+        android:background="#eee"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+</LinearLayout>

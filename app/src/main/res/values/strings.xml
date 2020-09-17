@@ -11,4 +11,6 @@
     <string name="email">Email</string>
     <string name="login">Login</string>
     <string name="ainda_n_o_tem_conta_crie_uma_aqui">Ainda não tem conta ? Crie uma aqui.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

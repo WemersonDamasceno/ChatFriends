@@ -103,9 +103,10 @@ public class CriarContaActivity extends AppCompatActivity {
         //povoar o usuario
         usuarioNovo.setNome(nomeUserCriarConta.getText().toString());
         usuarioNovo.setEmail(emailUserCriarConta.getText().toString());
-        usuarioNovo.setSenha(senhaUserCriarConta.getText().toString());
         usuarioNovo.setIdUser(FirebaseAuth.getInstance().getUid());
-        usuarioNovo.setUrlFoto("NA");
+        usuarioNovo.setQtdAmigos(0);
+        usuarioNovo.setUrlFoto("https://firebasestorage.googleapis.com/v0/b/chatfriends-625c9.appspot.com/o/" +
+                "avatarteste.png?alt=media&token=672eaa88-5862-4b78-a305-1e342f9e0c5a");
         salvarUsuario(usuarioNovo);
 
     }

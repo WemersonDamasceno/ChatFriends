@@ -3,40 +3,28 @@ package com.example.chatfriends.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class Usuario implements Parcelable {
     private String nome;
     private String email;
-    private String senha;
+    private String status;
     private String idUser;
     private String urlFoto;
-    private int qtdSeguidores;
-    private int qtdSeguindo;
-    private int qtdPublicacoes;
+    private int qtdAmigos;
+    private Mensagem lastMensagem;
 
-    public Usuario() {
-    }
 
-    public Usuario(String nome, String email, String senha,
-                   String idUser, String urlFoto, int qtdSeguidores, int qtdSeguindo, int qtdPublicacoes) {
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.idUser = idUser;
-        this.urlFoto = urlFoto;
-        this.qtdSeguidores = qtdSeguidores;
-        this.qtdSeguindo = qtdSeguindo;
-        this.qtdPublicacoes = qtdPublicacoes;
-    }
+    public Usuario(){}
 
     protected Usuario(Parcel in) {
         nome = in.readString();
         email = in.readString();
-        senha = in.readString();
+        status = in.readString();
         idUser = in.readString();
         urlFoto = in.readString();
-        qtdSeguidores = in.readInt();
-        qtdSeguindo = in.readInt();
-        qtdPublicacoes = in.readInt();
+        qtdAmigos = in.readInt();
+        lastMensagem = in.readParcelable(Mensagem.class.getClassLoader());
     }
 
     public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
@@ -67,12 +55,12 @@ public class Usuario implements Parcelable {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getIdUser() {
@@ -91,28 +79,30 @@ public class Usuario implements Parcelable {
         this.urlFoto = urlFoto;
     }
 
-    public int getQtdSeguidores() {
-        return qtdSeguidores;
+    public int getQtdAmigos() {
+        return qtdAmigos;
     }
 
-    public void setQtdSeguidores(int qtdSeguidores) {
-        this.qtdSeguidores = qtdSeguidores;
+    public void setQtdAmigos(int qtdAmigos) {
+        this.qtdAmigos = qtdAmigos;
     }
 
-    public int getQtdSeguindo() {
-        return qtdSeguindo;
+    public Mensagem getLastMensagem() {
+        return lastMensagem;
     }
 
-    public void setQtdSeguindo(int qtdSeguindo) {
-        this.qtdSeguindo = qtdSeguindo;
+    public void setLastMensagem(Mensagem lastMensagem) {
+        this.lastMensagem = lastMensagem;
     }
 
-    public int getQtdPublicacoes() {
-        return qtdPublicacoes;
-    }
-
-    public void setQtdPublicacoes(int qtdPublicacoes) {
-        this.qtdPublicacoes = qtdPublicacoes;
+    public Usuario(String nome, String email, String status, String idUser, String urlFoto, int qtdAmigos, Mensagem lastMensagem) {
+        this.nome = nome;
+        this.email = email;
+        this.status = status;
+        this.idUser = idUser;
+        this.urlFoto = urlFoto;
+        this.qtdAmigos = qtdAmigos;
+        this.lastMensagem = lastMensagem;
     }
 
     @Override
@@ -124,11 +114,10 @@ public class Usuario implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nome);
         dest.writeString(email);
-        dest.writeString(senha);
+        dest.writeString(status);
         dest.writeString(idUser);
         dest.writeString(urlFoto);
-        dest.writeInt(qtdSeguidores);
-        dest.writeInt(qtdSeguindo);
-        dest.writeInt(qtdPublicacoes);
+        dest.writeInt(qtdAmigos);
+        dest.writeParcelable(lastMensagem, flags);
     }
 }
