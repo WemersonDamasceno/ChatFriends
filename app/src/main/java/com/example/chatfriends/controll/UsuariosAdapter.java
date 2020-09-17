@@ -24,8 +24,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,23 +31,15 @@ import java.util.List;
 
 public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHolderUsuarios> {
     private ArrayList<Usuario> listUsuarios;
-    private StorageReference mStorageRef;
-    private StorageReference refDocumento;
-    private Usuario usuarioContato;
     private Context getContext;
 
     public UsuariosAdapter(Context getContext) {
         listUsuarios = new ArrayList<>();
-        usuarioContato = new Usuario();
         this.getContext = getContext;
     }
 
     public ArrayList<Usuario> getListUsuarios() {
         return listUsuarios;
-    }
-
-    public void setListUsuarios(ArrayList<Usuario> listUsuarios) {
-        this.listUsuarios = listUsuarios;
     }
 
 
@@ -104,9 +94,6 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
                 }
             });
 
-            mStorageRef = FirebaseStorage.getInstance().getReference();
-
-
         }
 
         private void verificarUser() {
@@ -136,6 +123,7 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
         private void setDados(final Usuario usuario) {
             FirebaseFirestore.getInstance().collection("/users")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                             List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
