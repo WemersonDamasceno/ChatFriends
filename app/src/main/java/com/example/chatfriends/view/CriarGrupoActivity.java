@@ -40,6 +40,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
     EditText etNomeGrupoAdd,descricaoGrupoAdd;
     CheckBox cbPrivacidadeGrupoAdd;
     Button btnCriarGrupo;
+    Grupo grupo;
 
     ProgressDialog progressDialogFoto;
     ProgressDialog progressDialogAdd;
@@ -63,6 +64,13 @@ public class CriarGrupoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selecionarFoto();
+            }
+        });
+
+        btnCriarGrupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                salvarGrupoBanco(grupo);
             }
         });
 
@@ -97,7 +105,6 @@ public class CriarGrupoActivity extends AppCompatActivity {
             imgPerfilPerfil.setImageURI(uri);
             imgTrocarFotoPerfil.setVisibility(View.INVISIBLE);
             enviarFoto(uri);
-
         }
     }
     private void enviarFoto(Uri selectedImage) {
@@ -149,10 +156,8 @@ public class CriarGrupoActivity extends AppCompatActivity {
         boolean privacidadeGrupo = cbPrivacidadeGrupoAdd.isChecked();
 
         //criar o obj grupo
-        Grupo grupo = new Grupo(idGrupo,idUserAdmin,idUsersGrupo,descricaoGrupo,privacidadeGrupo, urlFotoGrupo);
-
-        salvarGrupoBanco(grupo);
-
+        grupo = new Grupo(idGrupo,idUserAdmin,idUsersGrupo,descricaoGrupo,privacidadeGrupo, urlFotoGrupo);
+        //salvarGrupoBanco(grupo);
     }
 
     private void salvarGrupoBanco(Grupo grupo) {

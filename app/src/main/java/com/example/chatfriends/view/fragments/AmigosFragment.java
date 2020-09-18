@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -103,9 +102,7 @@ public class AmigosFragment extends Fragment {
                             Amigos amigos = doc.toObject(Amigos.class);
                             Usuario amigo1 = amigos.getUser1();
                             Usuario amigo2 = amigos.getUser2();
-                            if(amigo1.getIdUser().equals(FirebaseAuth.getInstance().getUid())){
-                                Log.i("teste", "1) Eu sou  "+amigo1.getNome());
-                                Log.i("teste","Amigos do "+amigo2.getNome());
+                            if(amigo1.getIdUser().equals(usuarioEu.getIdUser())){
                                 amigosAdapter.add(amigo2);
                                 amigosAdapter.notifyDataSetChanged();
                             }
