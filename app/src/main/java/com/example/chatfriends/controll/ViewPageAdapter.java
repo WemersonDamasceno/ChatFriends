@@ -6,15 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.chatfriends.model.Usuario;
 import com.example.chatfriends.view.fragments.AmigosFragment;
 import com.example.chatfriends.view.fragments.ConversasFragment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.example.chatfriends.view.fragments.GruposFragment;
 
 
 public class ViewPageAdapter extends FragmentPagerAdapter {
@@ -36,6 +30,9 @@ public class ViewPageAdapter extends FragmentPagerAdapter {
             case 1:
                 fragment = new AmigosFragment();
                 break;
+
+            case 2:
+                fragment = new GruposFragment();
         }
         return fragment;
     }
@@ -59,6 +56,6 @@ public class ViewPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

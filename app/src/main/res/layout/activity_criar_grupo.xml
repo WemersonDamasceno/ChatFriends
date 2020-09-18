@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.CriarGrupoActivity">
+
+    <RelativeLayout
+        android:id="@+id/rlFotoGrupo"
+        android:layout_marginTop="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/fotoGrupo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/fundocinza"/>
+
+        <ImageView
+            android:id="@+id/ivAddFotoGrupo"
+            android:layout_width="60dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_camera"/>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/etNomeGrupoAdd"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/rlFotoGrupo"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:ems="15"
+        android:hint="Nome do grupo"/>
+
+    <EditText
+        android:id="@+id/descricaoGrupoAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="15"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/etNomeGrupoAdd"
+        android:layout_centerHorizontal="true"
+        android:hint="Descrição do grupo (Opcional)"/>
+
+    <CheckBox
+        android:id="@+id/cbPrivacidadeGrupoAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/descricaoGrupoAdd"
+        android:text="Publico"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:textSize="17sp"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btnCriarGrupo"
+        android:layout_width="330dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/cbPrivacidadeGrupoAdd"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorBranco"
+        android:layout_height="wrap_content"
+        android:text="Criar Grupo"
+        android:background="@drawable/borda_arrendondados"/>
+
+
+
+
+
+
+</RelativeLayout>

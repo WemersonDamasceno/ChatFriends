@@ -56,6 +56,8 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setText("Conversas");
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_contatos);
         tabLayout.getTabAt(1).setText("Contatos");
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_grupos);
+        tabLayout.getTabAt(2).setText("Grupos");
 
 
 
