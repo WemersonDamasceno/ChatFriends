@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.chatfriends.R;
@@ -30,6 +32,7 @@ public class MyPerfilActivity extends AppCompatActivity {
     TextView userMyPerfil,emailMyPerfil,statusMyPerfil;
     Bundle bundle;
     Usuario usuarioRecebido;
+    LinearLayout llLost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class MyPerfilActivity extends AppCompatActivity {
         emailMyPerfil = findViewById(R.id.emailMyPerfil);
         statusMyPerfil = findViewById(R.id.statusMyPerfil);
         rvConvites = findViewById(R.id.rvConvites);
-
+         llLost = findViewById(R.id.layoutLostConvites);
 
         conviteAdapter = new ConviteAdapter(getBaseContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
@@ -94,10 +97,16 @@ public class MyPerfilActivity extends AppCompatActivity {
                             Convite convite = doc.toObject(Convite.class);
                             if(convite.getUserQuemRecebeu().getIdUser().equals(usuarioRecebido.getIdUser())){
                                 //adicionar na lista
-                                conviteAdapter.add(convite.getUserQuemEnviou());
-                                conviteAdapter.notifyDataSetChanged();
+                                if(!convite.isFoiAceito()) {
+                                    conviteAdapter.add(convite.getUserQuemEnviou());
+                                    conviteAdapter.notifyDataSetChanged();
+                                }
                             }
                         }
+                        if(conviteAdapter.getSize() == 0){
+                            llLost.setVisibility(View.VISIBLE);
+                        }
+                        Log.i("teste","tam: "+conviteAdapter.getSize());
                     }
                 });
 

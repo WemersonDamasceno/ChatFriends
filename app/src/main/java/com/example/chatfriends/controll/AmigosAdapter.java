@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatfriends.R;
 import com.example.chatfriends.model.Usuario;
-import com.example.chatfriends.view.TrocaDeMensagensActivity;
+import com.example.chatfriends.view.TrocaMensagensActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,7 +77,7 @@ public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolder
             nomeAmigo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext, TrocaDeMensagensActivity.class);
+                    Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
                     intent.putExtra("userMensagem", amigosList.get(getAdapterPosition()));
                     getContext.startActivity(intent);
                 }

@@ -69,6 +69,10 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
         conviteList.add(user);
     }
 
+    public int getSize(){
+        return conviteList.size();
+    }
+
 
     class ViewHolderConvites extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nomeCttLista;
@@ -130,13 +134,34 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                                 if(convite.getUserQuemRecebeu().getIdUser().equals(userEu.getIdUser())){
                                     if(convite.getUserQuemEnviou().getIdUser().
                                             equals(conviteList.get(getAdapterPosition()).getIdUser())){
+                                        upConvite(doc);
                                         //salvar em amigos
                                         salvarAmigos(userEu, conviteList.get(getAdapterPosition()));
                                     }
                                 }
                             }
+                            if(conviteList.size() == 0){
+
+                            }
                         }
                     });
+        }
+
+        private void upConvite(DocumentSnapshot doc) {
+            FirebaseFirestore.getInstance().collection("/convites")
+                    .document(doc.getId())
+                    .update("foiAceito",true)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.i("teste","Sucesso ao update na convite");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("teste","Erro ao update convite: "+e.getMessage());
+                }
+            });
         }
 
         private void salvarAmigos(final Usuario userEu, final Usuario usuarioAmigo) {

@@ -8,15 +8,18 @@ public class Mensagem implements Parcelable {
     private String idUserRemetente;
     private String idUserDestinatario;
     private String hora;
+    private String conteudo;
 
-    public Mensagem(String idMensagem, String idUserRemetente, String idUserDestinatario, String hora) {
+    public Mensagem(String idMensagem, String idUserRemetente, String idUserDestinatario, String hora, String conteudo) {
         this.idMensagem = idMensagem;
         this.idUserRemetente = idUserRemetente;
         this.idUserDestinatario = idUserDestinatario;
         this.hora = hora;
+        this.conteudo = conteudo;
     }
 
-    public Mensagem(){}
+    public Mensagem() {
+    }
 
     public String getIdMensagem() {
         return idMensagem;
@@ -50,24 +53,20 @@ public class Mensagem implements Parcelable {
         this.hora = hora;
     }
 
+    public String getConteudo() {
+        return conteudo;
+    }
+
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
+    }
+
     protected Mensagem(Parcel in) {
         idMensagem = in.readString();
         idUserRemetente = in.readString();
         idUserDestinatario = in.readString();
         hora = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(idMensagem);
-        dest.writeString(idUserRemetente);
-        dest.writeString(idUserDestinatario);
-        dest.writeString(hora);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        conteudo = in.readString();
     }
 
     public static final Creator<Mensagem> CREATOR = new Creator<Mensagem>() {
@@ -81,4 +80,18 @@ public class Mensagem implements Parcelable {
             return new Mensagem[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(idMensagem);
+        dest.writeString(idUserRemetente);
+        dest.writeString(idUserDestinatario);
+        dest.writeString(hora);
+        dest.writeString(conteudo);
+    }
 }

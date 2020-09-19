@@ -17,8 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatfriends.R;
 import com.example.chatfriends.model.Grupo;
-import com.example.chatfriends.view.TrocaDeMensagensActivity;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.chatfriends.view.TrocaMensagensActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -79,7 +78,7 @@ public class GruposAdapter extends RecyclerView.Adapter<GruposAdapter.ViewHolder
             nomeGrupo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext, TrocaDeMensagensActivity.class);
+                    Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
                     intent.putExtra("userMensagem", gruposList.get(getAdapterPosition()));
                     getContext.startActivity(intent);
                 }
@@ -110,11 +109,12 @@ public class GruposAdapter extends RecyclerView.Adapter<GruposAdapter.ViewHolder
                             List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot doc : docs) {
                                 Grupo grupos = doc.toObject(Grupo.class);
-                                if(grupos.getIdUsersGrupo().contains(FirebaseAuth.getInstance().getUid())){
+                                if(grupos.getIdGrupo().equals(gruposList.get(getAdapterPosition()).getIdGrupo())) {
                                     nomeGrupo.setText(grupos.getNomeGrupo());
                                     descGrupo.setText(grupos.getDescricaoGrupo());
-                                    //Picasso.get().load(grupos.getUrlFotoGrupo()).into(fotoGrupo);
+                                    Picasso.get().load(grupos.getUrlFotoGrupo()).into(fotoGrupo);
                                 }
+
                             }
                         }
                     });

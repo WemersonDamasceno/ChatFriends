@@ -25,6 +25,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +56,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
         cbPrivacidadeGrupoAdd = findViewById(R.id.cbPrivacidadeGrupoAdd);
         btnCriarGrupo = findViewById(R.id.btnCriarGrupo);
 
+        grupo = new Grupo();
         progressDialogAdd = new ProgressDialog(this);
         progressDialogFoto = new ProgressDialog(this);
 
@@ -66,7 +71,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
         btnCriarGrupo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvarGrupoBanco(grupo);
+                criarGrupo();
             }
         });
 
@@ -107,12 +112,8 @@ public class CriarGrupoActivity extends AppCompatActivity {
         progressDialogFoto.setTitle("Enviando sua foto...");
         progressDialogFoto.show();
 
-
         //Arrumar esse upload da foto
-        criarGrupo("NA");
-        progressDialogFoto.dismiss();
-        //salvar imagem no banco está dando um bug ????
-        /*String fileName = UUID.randomUUID().toString();
+        String fileName = UUID.randomUUID().toString();
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + fileName);
         ref.putFile(selectedImage)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -121,8 +122,8 @@ public class CriarGrupoActivity extends AppCompatActivity {
                         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri1) {
-                                criarGrupo(uri1.toString());
                                 progressDialogFoto.dismiss();
+                                grupo.setUrlFotoGrupo(uri1.toString());
                             }
                         });
                     }
@@ -141,11 +142,13 @@ public class CriarGrupoActivity extends AppCompatActivity {
                 double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                 progressDialogFoto.setMessage("Enviado: "+ (int) progress + "% completo");
             }
-        });*/
+        });
+
+        //
 
     }
 
-    private void criarGrupo(String urlFotoGrupo) {
+    private void criarGrupo() {
         progressDialogAdd.setTitle("Criando grupo...");
         progressDialogAdd.show();
 
@@ -157,9 +160,15 @@ public class CriarGrupoActivity extends AppCompatActivity {
         String descricaoGrupo = descricaoGrupoAdd.getText().toString();
         boolean privacidadeGrupo = cbPrivacidadeGrupoAdd.isChecked();
 
+        grupo.setNomeGrupo(nomeGrupo);
+        grupo.setIdGrupo(idGrupo);
+        grupo.setIdUserAdminGrupo(idUserAdmin);
+        grupo.setIdUsersGrupo(idUsersGrupo);
+        grupo.setDescricaoGrupo(descricaoGrupo);
+        grupo.setPrivacidadeGrupo(privacidadeGrupo);
+
         //criar o obj grupo
-        grupo = new Grupo(idGrupo,nomeGrupo,idUserAdmin,idUsersGrupo,descricaoGrupo,privacidadeGrupo,urlFotoGrupo);
-        //salvarGrupoBanco(grupo);
+        salvarGrupoBanco(grupo);
     }
 
     private void salvarGrupoBanco(Grupo grupo) {

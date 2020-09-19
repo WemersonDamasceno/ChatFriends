@@ -119,8 +119,6 @@ public class AmigosFragment extends Fragment {
                             Usuario amigo1 = amigos.getUser1();
                             Usuario amigo2 = amigos.getUser2();
                             if(amigo2.getIdUser().equals(FirebaseAuth.getInstance().getUid())){
-                                Log.i("teste", "2) Eu sou  "+amigo2.getNome());
-                                Log.i("teste","Amigos do "+amigo1.getNome());
                                 amigosAdapter.add(amigo1);
                                 amigosAdapter.notifyDataSetChanged();
                             }
