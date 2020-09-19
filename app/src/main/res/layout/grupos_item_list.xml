@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/fotoGrupo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/avatarteste"/>
+
+            <TextView
+                android:id="@+id/nomeGrupo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grupo de teste"
+                android:layout_toEndOf="@+id/fotoGrupo"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPreto"
+                android:textSize="17sp"
+                android:layout_marginStart="5dp"/>
+
+            <TextView
+                android:id="@+id/descGrupo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teste Aqui dos Status"
+                android:textColor="@color/colorPreto"
+                android:layout_toEndOf="@+id/fotoGrupo"
+                android:layout_below="@+id/nomeGrupo"
+                android:layout_marginStart="5dp"/>
+
+            <ImageView
+                android:id="@+id/ivEntrarGrupo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="22dp"
+                android:src="@drawable/ic_entrar_grupo" />
+
+        </RelativeLayout>
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

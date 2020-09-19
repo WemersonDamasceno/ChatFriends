@@ -1,9 +1,5 @@
 package com.example.chatfriends.view;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.chatfriends.R;
 import com.example.chatfriends.model.Grupo;
 import com.example.chatfriends.model.Usuario;
@@ -25,10 +25,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,8 +106,13 @@ public class CriarGrupoActivity extends AppCompatActivity {
     private void enviarFoto(Uri selectedImage) {
         progressDialogFoto.setTitle("Enviando sua foto...");
         progressDialogFoto.show();
-        //salvar imagem no banco
-        String fileName = UUID.randomUUID().toString();
+
+
+        //Arrumar esse upload da foto
+        criarGrupo("NA");
+        progressDialogFoto.dismiss();
+        //salvar imagem no banco está dando um bug ????
+        /*String fileName = UUID.randomUUID().toString();
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + fileName);
         ref.putFile(selectedImage)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -140,15 +141,16 @@ public class CriarGrupoActivity extends AppCompatActivity {
                 double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                 progressDialogFoto.setMessage("Enviado: "+ (int) progress + "% completo");
             }
-        });
+        });*/
 
     }
 
     private void criarGrupo(String urlFotoGrupo) {
-        progressDialogAdd.setTitle("Enviando sua foto...");
+        progressDialogAdd.setTitle("Criando grupo...");
         progressDialogAdd.show();
 
         String idGrupo = UUID.randomUUID().toString();
+        String nomeGrupo = etNomeGrupoAdd.getText().toString();
         String idUserAdmin = usuarioEu.getIdUser();
         List<String> idUsersGrupo = new ArrayList<>();
         idUsersGrupo.add(usuarioEu.getIdUser());
@@ -156,7 +158,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
         boolean privacidadeGrupo = cbPrivacidadeGrupoAdd.isChecked();
 
         //criar o obj grupo
-        grupo = new Grupo(idGrupo,idUserAdmin,idUsersGrupo,descricaoGrupo,privacidadeGrupo, urlFotoGrupo);
+        grupo = new Grupo(idGrupo,nomeGrupo,idUserAdmin,idUsersGrupo,descricaoGrupo,privacidadeGrupo,urlFotoGrupo);
         //salvarGrupoBanco(grupo);
     }
 

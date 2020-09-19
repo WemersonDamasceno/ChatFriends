@@ -7,22 +7,12 @@ import java.util.List;
 
 public class Grupo implements Parcelable {
     private String idGrupo;
+    private String nomeGrupo;
     private String idUserAdminGrupo;
     private List<String> idUsersGrupo;
     private String descricaoGrupo;
     private boolean privacidadeGrupo;
     private String urlFotoGrupo;
-
-
-
-    public Grupo(String idGrupo, String idUserAdminGrupo, List<String> idUsersGrupo, String descricaoGrupo, boolean privacidadeGrupo, String urlFotoGrupo) {
-        this.idGrupo = idGrupo;
-        this.idUserAdminGrupo = idUserAdminGrupo;
-        this.idUsersGrupo = idUsersGrupo;
-        this.descricaoGrupo = descricaoGrupo;
-        this.privacidadeGrupo = privacidadeGrupo;
-        this.urlFotoGrupo = urlFotoGrupo;
-    }
 
     public Grupo() {
     }
@@ -33,6 +23,14 @@ public class Grupo implements Parcelable {
 
     public void setIdGrupo(String idGrupo) {
         this.idGrupo = idGrupo;
+    }
+
+    public String getNomeGrupo() {
+        return nomeGrupo;
+    }
+
+    public void setNomeGrupo(String nomeGrupo) {
+        this.nomeGrupo = nomeGrupo;
     }
 
     public String getIdUserAdminGrupo() {
@@ -75,8 +73,19 @@ public class Grupo implements Parcelable {
         this.urlFotoGrupo = urlFotoGrupo;
     }
 
+    public Grupo(String idGrupo, String nomeGrupo, String idUserAdminGrupo, List<String> idUsersGrupo, String descricaoGrupo, boolean privacidadeGrupo, String urlFotoGrupo) {
+        this.idGrupo = idGrupo;
+        this.nomeGrupo = nomeGrupo;
+        this.idUserAdminGrupo = idUserAdminGrupo;
+        this.idUsersGrupo = idUsersGrupo;
+        this.descricaoGrupo = descricaoGrupo;
+        this.privacidadeGrupo = privacidadeGrupo;
+        this.urlFotoGrupo = urlFotoGrupo;
+    }
+
     protected Grupo(Parcel in) {
         idGrupo = in.readString();
+        nomeGrupo = in.readString();
         idUserAdminGrupo = in.readString();
         idUsersGrupo = in.createStringArrayList();
         descricaoGrupo = in.readString();
@@ -104,6 +113,7 @@ public class Grupo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(idGrupo);
+        dest.writeString(nomeGrupo);
         dest.writeString(idUserAdminGrupo);
         dest.writeStringList(idUsersGrupo);
         dest.writeString(descricaoGrupo);

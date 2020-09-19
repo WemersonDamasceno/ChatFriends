@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatfriends.R;
+import com.example.chatfriends.controll.GruposAdapter;
+import com.example.chatfriends.model.Grupo;
 import com.example.chatfriends.model.Usuario;
 import com.example.chatfriends.view.CriarGrupoActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,6 +27,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class GruposFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     Bundle bundle;
+    RecyclerView rvGrupos;
+    GruposAdapter gruposAdapter;
+
+
     public GruposFragment() {
         // Required empty public constructor
     }
@@ -42,6 +50,20 @@ public class GruposFragment extends Fragment {
 
         bundle = new Bundle();
         floatingActionButton = view.findViewById(R.id.fab);
+
+
+        rvGrupos = view.findViewById(R.id.rvGrupos);
+        gruposAdapter = new GruposAdapter(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setReverseLayout(false);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+
+        rvGrupos.setLayoutManager(layoutManager);
+        rvGrupos.setAdapter(gruposAdapter);
+
+
+        buscarGrupos();
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,5 +88,19 @@ public class GruposFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void buscarGrupos() {
+        FirebaseFirestore.getInstance().collection("/grupos")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                            Grupo grupo = doc.toObject(Grupo.class);
+                            gruposAdapter.add(grupo);
+                            gruposAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 }
