@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatfriends.R;
@@ -63,12 +64,14 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
     class ViewHolderMensagem extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imgPerfilRemetente;
         TextView txtMensagemRemetente;
+        CardView card;
 
 
         ViewHolderMensagem(@NonNull View itemView) {
             super(itemView);
             imgPerfilRemetente = itemView.findViewById(R.id.imgPerfilRemetente);
             txtMensagemRemetente = itemView.findViewById(R.id.txtMensagemRemetente);
+            card = itemView.findViewById(R.id.card);
         }
 
         @Override
