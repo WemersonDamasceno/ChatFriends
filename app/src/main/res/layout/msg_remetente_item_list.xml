@@ -10,7 +10,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginStart="5dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="#98FB98"
+        android:backgroundTint="#eee"
         app:cardCornerRadius="24dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"

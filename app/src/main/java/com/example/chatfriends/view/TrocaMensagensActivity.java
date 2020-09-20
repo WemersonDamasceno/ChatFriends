@@ -112,12 +112,10 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                     Timestamp timestamp = new Timestamp(milles);
                     mensagem.setData_hora(timestamp.toString());
 
-                    Toast.makeText(TrocaMensagensActivity.this, ""+timestamp, Toast.LENGTH_LONG).show();
-                    //mensagem.setData_hora(timestamp);
-
                     salvarMensagem(mensagem);
                     etMensagem.setText("");
                     //atualizar a ultima mensagem dos dois usuarios
+
                     recreate();
 
                 }
