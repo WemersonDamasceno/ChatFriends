@@ -132,9 +132,9 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
                                 if(user.getIdUser().equals(usuario.getIdUser())){
                                     nomeCttLista.setText(user.getNome());
                                     if(user.getStatus() == null || user.getStatus().equals("")){
-                                        statusCttLista.setText("Sem status também é um status...");
+                                        statusCttLista.setText("Sem status...");
                                     }else {
-                                        statusCttLista.setText(user.getStatus());
+                                        statusCttLista.setText(user.getStatus().substring(0,30)+"...");
                                     }
                                     Picasso.get().load(usuario.getUrlFoto()).into(imgCttLista);
                                 }

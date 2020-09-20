@@ -106,7 +106,7 @@ public class CriarContaActivity extends AppCompatActivity {
         usuarioNovo.setIdUser(FirebaseAuth.getInstance().getUid());
         usuarioNovo.setQtdAmigos(0);
         usuarioNovo.setUrlFoto("https://firebasestorage.googleapis.com/v0/b/chatfriends-625c9.appspot.com/o/" +
-                "avatarteste.png?alt=media&token=672eaa88-5862-4b78-a305-1e342f9e0c5a");
+                "images%2Favatarteste.png?alt=media&token=8c413d51-2a5c-4170-99e5-a5d587bb0d91");
         salvarUsuario(usuarioNovo);
 
     }

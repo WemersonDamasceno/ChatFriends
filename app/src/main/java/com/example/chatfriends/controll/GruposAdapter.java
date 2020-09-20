@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatfriends.R;
 import com.example.chatfriends.model.Grupo;
+import com.example.chatfriends.model.Usuario;
 import com.example.chatfriends.view.TrocaMensagensActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -78,9 +80,24 @@ public class GruposAdapter extends RecyclerView.Adapter<GruposAdapter.ViewHolder
             nomeGrupo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
-                    intent.putExtra("userMensagem", gruposList.get(getAdapterPosition()));
-                    getContext.startActivity(intent);
+                    //me mandar tambem
+                    FirebaseFirestore.getInstance().collection("/users")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+                                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                                        Usuario user = doc.toObject(Usuario.class);
+                                        if (user.getIdUser().equals(FirebaseAuth.getInstance().getUid())) {
+                                            Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
+                                            intent.putExtra("grupoMensagem", gruposList.get(getAdapterPosition()));
+                                            intent.putExtra("userEuMensagem", user);
+                                            getContext.startActivity(intent);
+                                        }
+                                    }
+                                }
+                            });
+
+
                 }
             });
 
@@ -111,7 +128,8 @@ public class GruposAdapter extends RecyclerView.Adapter<GruposAdapter.ViewHolder
                                 Grupo grupos = doc.toObject(Grupo.class);
                                 if(grupos.getIdGrupo().equals(gruposList.get(getAdapterPosition()).getIdGrupo())) {
                                     nomeGrupo.setText(grupos.getNomeGrupo());
-                                    descGrupo.setText(grupos.getDescricaoGrupo());
+                                    String desc = grupo.getDescricaoGrupo();
+                                    descGrupo.setText(desc.substring(0,30)+"...");
                                     Picasso.get().load(grupos.getUrlFotoGrupo()).into(fotoGrupo);
                                 }
 

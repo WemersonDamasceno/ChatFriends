@@ -36,8 +36,11 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolderMensagem onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.amigos_item_list, null, false);
+        @SuppressLint("InflateParams")
+
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.msg_remetente_item_list, null, false);
+
         return new ViewHolderMensagem(view);
     }
 
@@ -65,11 +68,11 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
         TextView txtMensagemDestinario;
 
 
+
         ViewHolderMensagem(@NonNull View itemView) {
             super(itemView);
             imgPerfilRemetente = itemView.findViewById(R.id.imgPerfilRemetente);
             txtMensagemRemetente = itemView.findViewById(R.id.txtMensagemRemetente);
-
         }
 
 
@@ -88,7 +91,8 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
                             for (DocumentSnapshot doc : docs) {
                                 Mensagem mensagem1 = doc.toObject(Mensagem.class);
                                 if(mensagem1.getIdMensagem().equals(mensagem.getIdMensagem())){
-
+                                    //colocar a foto aqui
+                                    txtMensagemRemetente.setText(mensagem.getConteudo());
                                 }
                             }
                         }

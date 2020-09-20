@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.chatfriends.R;
 import com.example.chatfriends.model.Usuario;
 import com.example.chatfriends.view.TrocaMensagensActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,9 +78,22 @@ public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolder
             nomeAmigo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
-                    intent.putExtra("userMensagem", amigosList.get(getAdapterPosition()));
-                    getContext.startActivity(intent);
+                    //Mandar eu também..
+                   FirebaseFirestore.getInstance().collection("/users")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+                                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                                        Usuario user = doc.toObject(Usuario.class);
+                                        if (user.getIdUser().equals(FirebaseAuth.getInstance().getUid())) {
+                                            Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
+                                            intent.putExtra("userMensagem", amigosList.get(getAdapterPosition()));
+                                            intent.putExtra("userEuMensagem", user);
+                                            getContext.startActivity(intent);
+                                        }
+                                    }
+                                }
+                            });
                 }
             });
 
@@ -104,11 +118,11 @@ public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolder
                                 if (user.getIdUser().equals(usuario.getIdUser())) {
                                     nomeAmigo.setText(user.getNome());
                                     if (user.getStatus() == null) {
-                                        statusAmigo.setText("Sem status também é um status...");
+                                        statusAmigo.setText("Sem status...");
                                     } else {
                                         statusAmigo.setText(user.getStatus());
                                     }
-                                    Picasso.get().load(usuario.getUrlFoto()).into(fotoAmigo);
+                                    Picasso.get().load(user.getUrlFoto()).into(fotoAmigo);
                                 }
                             }
                         }

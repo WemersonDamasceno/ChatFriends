@@ -9,13 +9,12 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:backgroundTint="#00FFFF"
         app:cardCornerRadius="24dp"
         app:cardElevation="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,12 +23,12 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgPerfilDestinatario"
                 android:layout_width="40dp"
-                app:civ_border_width="2dp"
-                app:civ_border_color="@color/colorAzul"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="12dp"
                 android:src="@drawable/avatarteste"
+                app:civ_border_color="@color/colorAzul"
+                app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -39,14 +38,14 @@
                 android:id="@+id/txtMensagemDestinatario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="250dp"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="5dp"
                 android:text="Oi tudo, e você ?"
-                android:maxWidth="250dp"
+                android:textAlignment="viewEnd"
                 android:textColor="@color/colorPreto"
                 android:textSize="20sp"
-                android:textAlignment="viewEnd"
                 app:layout_constraintEnd_toStartOf="@+id/imgPerfilDestinatario"
                 app:layout_constraintTop_toTopOf="parent" />
 

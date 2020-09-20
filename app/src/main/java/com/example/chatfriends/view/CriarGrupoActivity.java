@@ -159,6 +159,10 @@ public class CriarGrupoActivity extends AppCompatActivity {
         idUsersGrupo.add(usuarioEu.getIdUser());
         String descricaoGrupo = descricaoGrupoAdd.getText().toString();
         boolean privacidadeGrupo = cbPrivacidadeGrupoAdd.isChecked();
+        if(grupo.getUrlFotoGrupo() == null || grupo.getUrlFotoGrupo().equals("")){
+            grupo.setUrlFotoGrupo("https://firebasestorage.googleapis.com/v0/b/chatfriends-625c9.appspot.com/o/" +
+                    "images%2Favatarteste.png?alt=media&token=8c413d51-2a5c-4170-99e5-a5d587bb0d91");
+        }
 
         grupo.setNomeGrupo(nomeGrupo);
         grupo.setIdGrupo(idGrupo);

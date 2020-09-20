@@ -140,9 +140,6 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                                     }
                                 }
                             }
-                            if(conviteList.size() == 0){
-
-                            }
                         }
                     });
         }
