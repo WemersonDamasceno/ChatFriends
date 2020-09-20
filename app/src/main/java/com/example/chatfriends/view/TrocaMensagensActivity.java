@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +22,6 @@ import com.example.chatfriends.model.Mensagem;
 import com.example.chatfriends.model.Usuario;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class TrocaMensagensActivity extends AppCompatActivity {
@@ -59,12 +60,12 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         mensagemAdapter = new MensagemAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
-        layoutManager.setReverseLayout(true);
+        layoutManager.setReverseLayout(false);
 
         rvMensagens.setLayoutManager(layoutManager);
         rvMensagens.setAdapter(mensagemAdapter);
 
-        buscarMensagens();
+       buscarMensagens();
 
         //Receber pessoa ou grupo
         Intent intent = getIntent();
@@ -97,18 +98,26 @@ public class TrocaMensagensActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(etMensagem.getText().toString().equals("")){
                     etMensagem.setError("Digite uma mensagem....");
+
                 }else{
-                    //Toast.makeText(TrocaMensagensActivity.this, "Remetente: "+usuarioEu.getNome(), Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(TrocaMensagensActivity.this, "Destinatario: "+usuarioAmigo.getNome(), Toast.LENGTH_SHORT).show();
                     Mensagem mensagem = new Mensagem();
                     mensagem.setConteudo(etMensagem.getText().toString());
                     mensagem.setIdMensagem(UUID.randomUUID().toString());
                     mensagem.setIdUserRemetente(usuarioEu.getIdUser());
                     mensagem.setIdUserDestinatario(usuarioAmigo.getIdUser());
-                    //ainda tem q adicionar a hora da mensagem
+                    mensagem.setUrlFotoDono(usuarioEu.getUrlFoto());
+                    mensagem.setIfLeft(false); //se a msg for minha fica na direita
+
+                    long milles = System.currentTimeMillis();
+                    Timestamp timestamp = new Timestamp(milles);
+                    mensagem.setData_hora(timestamp.toString());
+
+                    Toast.makeText(TrocaMensagensActivity.this, ""+timestamp, Toast.LENGTH_LONG).show();
+                    //mensagem.setData_hora(timestamp);
 
                     salvarMensagem(mensagem);
                     etMensagem.setText("");
+                    //atualizar a ultima mensagem dos dois usuarios
                     recreate();
 
                 }
@@ -136,9 +145,14 @@ public class TrocaMensagensActivity extends AppCompatActivity {
 
     private void buscarMensagens() {
         FirebaseFirestore.getInstance().collection("/mensagens")
+                .orderBy("data_hora")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if(e != null){
+                            Log.i("teste",e.getMessage());
+                            return;
+                        }
                         for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
                             Mensagem mensg = doc.toObject(Mensagem.class);
                             if(mensg.getIdUserDestinatario().equals(usuarioEu.getIdUser())
@@ -148,8 +162,6 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                                     mensagemAdapter.add(mensg);
                                     mensagemAdapter.notifyDataSetChanged();
                                 }
-
-
                             }
                         }
                     }

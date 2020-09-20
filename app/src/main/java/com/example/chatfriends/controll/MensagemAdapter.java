@@ -20,6 +20,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +38,17 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
     @Override
     public ViewHolderMensagem onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         @SuppressLint("InflateParams")
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.msg_remetente_item_list, null, false);
 
         return new ViewHolderMensagem(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolderMensagem holder, int position) {
         holder.setDados(mensagemList.get(position));
     }
-
 
     @Override
     public int getItemCount() {
@@ -64,17 +64,12 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
         ImageView imgPerfilRemetente;
         TextView txtMensagemRemetente;
 
-        ImageView imgPerfilDestinario;
-        TextView txtMensagemDestinario;
-
-
 
         ViewHolderMensagem(@NonNull View itemView) {
             super(itemView);
             imgPerfilRemetente = itemView.findViewById(R.id.imgPerfilRemetente);
             txtMensagemRemetente = itemView.findViewById(R.id.txtMensagemRemetente);
         }
-
 
         @Override
         public void onClick(View v) {
@@ -93,6 +88,7 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
                                 if(mensagem1.getIdMensagem().equals(mensagem.getIdMensagem())){
                                     //colocar a foto aqui
                                     txtMensagemRemetente.setText(mensagem.getConteudo());
+                                    Picasso.get().load(mensagem.getUrlFotoDono()).into(imgPerfilRemetente);
                                 }
                             }
                         }

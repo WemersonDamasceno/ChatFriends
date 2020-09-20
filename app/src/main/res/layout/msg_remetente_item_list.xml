@@ -41,7 +41,7 @@
                 android:maxWidth="250dp"
                 android:paddingEnd="10dp"
                 android:text="Oi tudo bom ?"
-                android:textAlignment="viewEnd"
+                android:textAlignment="viewStart"
                 android:textColor="@color/colorPreto"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
