@@ -64,6 +64,8 @@ public class GruposFragment extends Fragment {
 
         buscarGrupos();
 
+        //Algo ta bugnado quando clico pra abrir uma conversa em grupo
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

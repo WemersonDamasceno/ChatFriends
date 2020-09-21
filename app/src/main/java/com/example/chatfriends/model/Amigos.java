@@ -4,19 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Amigos implements Parcelable {
-    Usuario user1;
-    Usuario user2;
+    String user1Id;
+    String user2Id;
     String idAmigos;
 
-    public Amigos(Usuario user1, Usuario user2, String idAmigos) {
-        this.user1 = user1;
-        this.user2 = user2;
-        this.idAmigos = idAmigos;
+    public Amigos() {
     }
 
     protected Amigos(Parcel in) {
-        user1 = in.readParcelable(Usuario.class.getClassLoader());
-        user2 = in.readParcelable(Usuario.class.getClassLoader());
+        user1Id = in.readString();
+        user2Id = in.readString();
         idAmigos = in.readString();
     }
 
@@ -32,20 +29,20 @@ public class Amigos implements Parcelable {
         }
     };
 
-    public Usuario getUser1() {
-        return user1;
+    public String getUser1Id() {
+        return user1Id;
     }
 
-    public void setUser1(Usuario user1) {
-        this.user1 = user1;
+    public void setUser1Id(String user1Id) {
+        this.user1Id = user1Id;
     }
 
-    public Usuario getUser2() {
-        return user2;
+    public String getUser2Id() {
+        return user2Id;
     }
 
-    public void setUser2(Usuario user2) {
-        this.user2 = user2;
+    public void setUser2Id(String user2Id) {
+        this.user2Id = user2Id;
     }
 
     public String getIdAmigos() {
@@ -56,7 +53,10 @@ public class Amigos implements Parcelable {
         this.idAmigos = idAmigos;
     }
 
-    public Amigos() {
+    public Amigos(String user1Id, String user2Id, String idAmigos) {
+        this.user1Id = user1Id;
+        this.user2Id = user2Id;
+        this.idAmigos = idAmigos;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class Amigos implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(user1, flags);
-        dest.writeParcelable(user2, flags);
+        dest.writeString(user1Id);
+        dest.writeString(user2Id);
         dest.writeString(idAmigos);
     }
 }

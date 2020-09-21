@@ -39,7 +39,7 @@ import java.util.UUID;
 
 public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHolderConvites> {
     private Context getContext;
-    private List<Usuario> conviteList;
+    private List<String> conviteList;
 
     public ConviteAdapter(Context getContext) {
         this.getContext = getContext;
@@ -65,8 +65,8 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
         return conviteList.size();
     }
 
-    public void add(Usuario user) {
-        conviteList.add(user);
+    public void add(String userId) {
+        conviteList.add(userId);
     }
 
     public int getSize(){
@@ -133,10 +133,21 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                                 //Se convite for recebido por mim
                                 if(convite.getUserQuemRecebeu().getIdUser().equals(userEu.getIdUser())){
                                     if(convite.getUserQuemEnviou().getIdUser().
-                                            equals(conviteList.get(getAdapterPosition()).getIdUser())){
+                                            equals(conviteList.get(getAdapterPosition()))){
                                         upConvite(doc);
                                         //salvar em amigos
-                                        salvarAmigos(userEu, conviteList.get(getAdapterPosition()));
+                                        FirebaseFirestore.getInstance().collection("/users")
+                                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                                        for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                                                            Usuario user = doc.toObject(Usuario.class);
+                                                            if(user.getIdUser().equals(conviteList.get(getAdapterPosition()))){
+                                                                salvarAmigos(userEu, user);
+                                                            }
+                                                        }
+                                                    }
+                                                });
                                     }
                                 }
                             }
@@ -163,7 +174,7 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
 
         private void salvarAmigos(final Usuario userEu, final Usuario usuarioAmigo) {
             incrementarQtdAmigos(userEu,usuarioAmigo);
-            Amigos amigos = new Amigos(userEu,usuarioAmigo, UUID.randomUUID().toString());
+            Amigos amigos = new Amigos(userEu.getIdUser(),usuarioAmigo.getIdUser(), UUID.randomUUID().toString());
 
             //Enviar essa parte pro completed do update
             FirebaseFirestore.getInstance().collection("/amigos")
@@ -235,7 +246,7 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
             Log.i("teste","Clicou no item "+getAdapterPosition());
         }
 
-        private void setDados(final Usuario usuario) {
+        private void setDados(final String userId) {
             FirebaseFirestore.getInstance().collection("/users")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @SuppressLint("SetTextI18n")
@@ -244,14 +255,14 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                             List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot doc : docs) {
                                 Usuario user = doc.toObject(Usuario.class);
-                                if(user.getIdUser().equals(usuario.getIdUser())){
+                                if(user.getIdUser().equals(userId)){
                                     nomeCttLista.setText(user.getNome());
                                     if(user.getStatus() == null || user.getStatus().equals("")){
                                         statusCttLista.setText("Sem status também é um status...");
                                     }else {
                                         statusCttLista.setText(user.getStatus());
                                     }
-                                    Picasso.get().load(usuario.getUrlFoto()).into(imgCttLista);
+                                    Picasso.get().load(user.getUrlFoto()).into(imgCttLista);
                                 }
                             }
 

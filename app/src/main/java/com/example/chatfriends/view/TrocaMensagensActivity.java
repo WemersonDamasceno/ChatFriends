@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +43,6 @@ public class TrocaMensagensActivity extends AppCompatActivity {
     Usuario usuarioAmigo;
     Usuario usuarioEu;
     Grupo grupo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +56,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         txtNomeMensagem = findViewById(R.id.txtNomeMensagem);
         ivBack = findViewById(R.id.ivBack);
 
+
         mensagemAdapter = new MensagemAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -64,7 +65,9 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         rvMensagens.setLayoutManager(layoutManager);
         rvMensagens.setAdapter(mensagemAdapter);
 
-       buscarMensagens();
+
+        mensagemAdapter.getMensagemList().clear();
+        buscarMensagens();
 
         //Receber pessoa ou grupo
         Intent intent = getIntent();
@@ -110,13 +113,11 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                     long milles = System.currentTimeMillis();
                     Timestamp timestamp = new Timestamp(milles);
                     mensagem.setData_hora(timestamp.toString());
-
+                    Log.i("teste","Criou a mensagem");
                     salvarMensagem(mensagem);
                     etMensagem.setText("");
                     //atualizar a ultima mensagem dos dois usuarios
-
                     recreate();
-
                 }
             }
         });

@@ -199,11 +199,11 @@ public class MyPerfilActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                            Convite convite = doc.toObject(Convite.class);
+                            final Convite convite = doc.toObject(Convite.class);
                             if (convite.getUserQuemRecebeu().getIdUser().equals(usuarioRecebido.getIdUser())) {
                                 //adicionar na lista
                                 if (!convite.isFoiAceito()) {
-                                    conviteAdapter.add(convite.getUserQuemEnviou());
+                                    conviteAdapter.add(convite.getUserQuemEnviou().getIdUser());
                                     conviteAdapter.notifyDataSetChanged();
                                 }
                             }

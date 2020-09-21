@@ -31,11 +31,11 @@ import java.util.List;
 
 public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolderAmigos> {
     private Context getContext;
-    private List<Usuario> amigosList;
+    private List<String> amigosListIds;
 
     public AmigosAdapter(Context getContext) {
         this.getContext = getContext;
-        this.amigosList = new ArrayList<>();
+        this.amigosListIds = new ArrayList<>();
     }
 
     @NonNull
@@ -48,19 +48,22 @@ public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderAmigos holder, int position) {
-        holder.setDados(amigosList.get(position));
+        holder.setDados(amigosListIds.get(position));
     }
 
 
     @Override
     public int getItemCount() {
-        return amigosList.size();
+        return amigosListIds.size();
     }
 
-    public void add(Usuario user) {
-        amigosList.add(user);
+    public void add(String user) {
+        amigosListIds.add(user);
     }
 
+    public List<String> getAmigosListIds(){
+        return amigosListIds;
+    }
 
     class ViewHolderAmigos extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nomeAmigo;
@@ -83,15 +86,16 @@ public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolder
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+                                    final Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
                                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                                        Usuario user = doc.toObject(Usuario.class);
+                                        final Usuario user = doc.toObject(Usuario.class);
                                         if (user.getIdUser().equals(FirebaseAuth.getInstance().getUid())) {
-                                            Intent intent = new Intent(getContext, TrocaMensagensActivity.class);
-                                            intent.putExtra("userMensagem", amigosList.get(getAdapterPosition()));
                                             intent.putExtra("userEuMensagem", user);
-                                            getContext.startActivity(intent);
+                                        }if(user.getIdUser().equals(amigosListIds.get(getAdapterPosition()))){
+                                            intent.putExtra("userMensagem",user);
                                         }
                                     }
+                                    getContext.startActivity(intent);
                                 }
                             });
                 }
@@ -106,7 +110,7 @@ public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolder
             Log.i("teste", "Clicou no item " + getAdapterPosition());
         }
 
-        private void setDados(final Usuario usuario) {
+        private void setDados(final String userId) {
             FirebaseFirestore.getInstance().collection("/users")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @SuppressLint("SetTextI18n")
@@ -114,15 +118,15 @@ public class AmigosAdapter extends RecyclerView.Adapter<AmigosAdapter.ViewHolder
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                             List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot doc : docs) {
-                                Usuario user = doc.toObject(Usuario.class);
-                                if (user.getIdUser().equals(usuario.getIdUser())) {
-                                    nomeAmigo.setText(user.getNome());
-                                    if (user.getStatus() == null) {
+                                Usuario userBanco = doc.toObject(Usuario.class);
+                                if (userBanco.getIdUser().equals(userId)) {
+                                    nomeAmigo.setText(userBanco.getNome());
+                                    if (userBanco.getStatus() == null) {
                                         statusAmigo.setText("Sem status...");
                                     } else {
-                                        statusAmigo.setText(user.getStatus());
+                                        statusAmigo.setText(userBanco.getStatus());
                                     }
-                                    Picasso.get().load(user.getUrlFoto()).into(fotoAmigo);
+                                    Picasso.get().load(userBanco.getUrlFoto()).into(fotoAmigo);
                                 }
                             }
                         }

@@ -2,6 +2,7 @@ package com.example.chatfriends.controll;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatfriends.R;
 import com.example.chatfriends.model.Mensagem;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,7 +31,6 @@ import java.util.List;
 public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHolderMensagem> {
     private Context getContext;
     private List<Mensagem> mensagemList;
-
     public MensagemAdapter(Context getContext) {
         this.getContext = getContext;
         this.mensagemList = new ArrayList<>();
@@ -55,6 +56,9 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
     public int getItemCount() {
         return mensagemList.size();
     }
+    public List<Mensagem> getMensagemList( ){
+        return mensagemList;
+    }
 
     public void add(Mensagem mensagem) {
         mensagemList.add(mensagem);
@@ -64,14 +68,16 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
     class ViewHolderMensagem extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imgPerfilRemetente;
         TextView txtMensagemRemetente;
-        CardView card;
+        ConstraintLayout ctLayout;
+
 
 
         ViewHolderMensagem(@NonNull View itemView) {
             super(itemView);
             imgPerfilRemetente = itemView.findViewById(R.id.imgPerfilRemetente);
             txtMensagemRemetente = itemView.findViewById(R.id.txtMensagemRemetente);
-            card = itemView.findViewById(R.id.card);
+
+            ctLayout = itemView.findViewById(R.id.ctLayout);
         }
 
         @Override
@@ -92,6 +98,11 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
                                     //colocar a foto aqui
                                     txtMensagemRemetente.setText(mensagem.getConteudo());
                                     Picasso.get().load(mensagem.getUrlFotoDono()).into(imgPerfilRemetente);
+                                    if(!mensagem1.getIdUserRemetente().equals(FirebaseAuth.getInstance().getUid())){
+                                        ctLayout.setBackgroundColor(Color.parseColor("#B0E0E6"));
+                                    }else{
+                                        ctLayout.setBackgroundColor(Color.parseColor("#90EE90"));
+                                    }
                                 }
                             }
                         }

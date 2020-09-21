@@ -2,7 +2,6 @@ package com.example.chatfriends.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +72,8 @@ public class AmigosFragment extends Fragment {
         return view;
     }
 
+    //Trocar a parte de amigos conter um user para conter apenas o id do user;
+
     private void encontrarUser() {
         FirebaseFirestore.getInstance().collection("/users")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -97,15 +98,27 @@ public class AmigosFragment extends Fragment {
         FirebaseFirestore.getInstance().collection("/amigos")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
                             Amigos amigos = doc.toObject(Amigos.class);
-                            Usuario amigo1 = amigos.getUser1();
-                            Usuario amigo2 = amigos.getUser2();
-                            if(amigo1.getIdUser().equals(usuarioEu.getIdUser())){
-                                amigosAdapter.add(amigo2);
-                                amigosAdapter.notifyDataSetChanged();
-                            }
+                            final String amigo1 = amigos.getUser1Id();
+                            final String amigo2 = amigos.getUser2Id();
+                            FirebaseFirestore.getInstance().collection("/users")
+                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+                                            for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                                                Usuario user = doc.toObject(Usuario.class);
+                                                if(amigo1.equals(usuarioEu.getIdUser())){
+                                                    if(!amigosAdapter.getAmigosListIds().contains(amigo2)) {
+                                                        amigosAdapter.add(amigo2);
+                                                        amigosAdapter.notifyDataSetChanged();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+
                         }
                     }
                 });
@@ -115,13 +128,24 @@ public class AmigosFragment extends Fragment {
                     @Override
                     public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
                         for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
-                            Amigos amigos = doc.toObject(Amigos.class);
-                            Usuario amigo1 = amigos.getUser1();
-                            Usuario amigo2 = amigos.getUser2();
-                            if(amigo2.getIdUser().equals(FirebaseAuth.getInstance().getUid())){
-                                amigosAdapter.add(amigo1);
-                                amigosAdapter.notifyDataSetChanged();
-                            }
+                            final Amigos amigos = doc.toObject(Amigos.class);
+                            final String amigo1 = amigos.getUser1Id();
+                            final String amigo2 = amigos.getUser2Id();
+                            FirebaseFirestore.getInstance().collection("/users")
+                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+                                            for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                                                Usuario user = doc.toObject(Usuario.class);
+                                                if(amigo2.equals(usuarioEu.getIdUser())){
+                                                    if(!amigosAdapter.getAmigosListIds().contains(amigo1)) {
+                                                        amigosAdapter.add(amigo1);
+                                                        amigosAdapter.notifyDataSetChanged();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
                         }
                     }
                 });
