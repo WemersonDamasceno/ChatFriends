@@ -1,6 +1,7 @@
 package com.example.chatfriends.view;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
     Usuario usuarioAmigo;
     Usuario usuarioEu;
     Grupo grupo;
+    MediaPlayer notificacaoToque;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         ic_foto_perfil_tela_mensg = findViewById(R.id.ic_foto_perfil_tela_mensg);
         txtNomeMensagem = findViewById(R.id.txtNomeMensagem);
         ivBack = findViewById(R.id.ivBack);
-
+        notificacaoToque = MediaPlayer.create(this, R.raw.toque);
 
         mensagemAdapter = new MensagemAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -80,7 +82,6 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                 Picasso.get().load(grupo.getUrlFotoGrupo()).into(ic_foto_perfil_tela_mensg);
                 txtNomeMensagem.setText(grupo.getNomeGrupo());
                 Log.i("teste","Grupo");
-                //buscarMensagens do grupo();
                 buscarMsgUsersInGrupo();
             }
             if(intent.getParcelableExtra("userMensagem") != null){
@@ -109,8 +110,10 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                     etMensagem.setError("Digite uma mensagem....");
                 }else
                     if(usuarioAmigo != null){
-                    criarMensagemUsuario();
-                }else if(grupo != null){
+                        criarMensagemUsuario();
+                    }
+                    else
+                    if(grupo != null){
                         criarMensagemGrupo();
                     }
             }
@@ -127,6 +130,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         mensagem.setIdUserDestinatario(grupo.getIdGrupo());
         mensagem.setUrlFotoDono(usuarioEu.getUrlFoto());
         mensagem.setIfLeft(false); //se a msg for minha fica na direita
+        mensagem.setTipoMsg("grupo");
 
         long milles = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(milles);
@@ -135,7 +139,8 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         salvarMensagem(mensagem);
         etMensagem.setText("");
         //atualizar a ultima mensagem dos dois usuarios
-        recreate();
+        //recreate();
+        notificacaoToque.start();
     }
 
     private void criarMensagemUsuario() {
@@ -146,6 +151,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         mensagem.setIdUserDestinatario(usuarioAmigo.getIdUser());
         mensagem.setUrlFotoDono(usuarioEu.getUrlFoto());
         mensagem.setIfLeft(false); //se a msg for minha fica na direita
+        mensagem.setTipoMsg("user");
 
         long milles = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(milles);
@@ -154,7 +160,8 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         salvarMensagem(mensagem);
         etMensagem.setText("");
         //atualizar a ultima mensagem dos dois usuarios
-        recreate();
+        //recreate();
+        notificacaoToque.start();
     }
 
 

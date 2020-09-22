@@ -12,9 +12,9 @@ public class Mensagem implements Parcelable {
     private String data_hora;
     private String conteudo;
     private boolean ifLeft;
+    private String tipoMsg;
     private String urlFotoDono;
 
-    //cada mensagem vai ter uma foto e dizer onde é sua posicao
     public Mensagem() {
     }
 
@@ -25,6 +25,7 @@ public class Mensagem implements Parcelable {
         data_hora = in.readString();
         conteudo = in.readString();
         ifLeft = in.readByte() != 0;
+        tipoMsg = in.readString();
         urlFotoDono = in.readString();
     }
 
@@ -88,6 +89,14 @@ public class Mensagem implements Parcelable {
         this.ifLeft = ifLeft;
     }
 
+    public String getTipoMsg() {
+        return tipoMsg;
+    }
+
+    public void setTipoMsg(String tipoMsg) {
+        this.tipoMsg = tipoMsg;
+    }
+
     public String getUrlFotoDono() {
         return urlFotoDono;
     }
@@ -96,13 +105,14 @@ public class Mensagem implements Parcelable {
         this.urlFotoDono = urlFotoDono;
     }
 
-    public Mensagem(String idMensagem, String idUserRemetente, String idUserDestinatario, String data_hora, String conteudo, boolean ifLeft, String urlFotoDono) {
+    public Mensagem(String idMensagem, String idUserRemetente, String idUserDestinatario, String data_hora, String conteudo, boolean ifLeft, String tipoMsg, String urlFotoDono) {
         this.idMensagem = idMensagem;
         this.idUserRemetente = idUserRemetente;
         this.idUserDestinatario = idUserDestinatario;
         this.data_hora = data_hora;
         this.conteudo = conteudo;
         this.ifLeft = ifLeft;
+        this.tipoMsg = tipoMsg;
         this.urlFotoDono = urlFotoDono;
     }
 
@@ -119,6 +129,7 @@ public class Mensagem implements Parcelable {
         dest.writeString(data_hora);
         dest.writeString(conteudo);
         dest.writeByte((byte) (ifLeft ? 1 : 0));
+        dest.writeString(tipoMsg);
         dest.writeString(urlFotoDono);
     }
 }

@@ -23,6 +23,7 @@ import com.example.chatfriends.model.Convite;
 import com.example.chatfriends.model.Usuario;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,7 +42,7 @@ import javax.annotation.Nullable;
 public class MyPerfilActivity extends AppCompatActivity {
     RecyclerView rvConvites;
     ConviteAdapter conviteAdapter;
-    ImageView imgPerfilPerfil, imgTrocarFotoPerfil;
+    ImageView imgPerfilPerfil, imgTrocarFotoPerfil,ic_sair;
     TextView userMyPerfil, emailMyPerfil, statusMyPerfil;
     Bundle bundle;
     Usuario usuarioRecebido;
@@ -60,6 +61,7 @@ public class MyPerfilActivity extends AppCompatActivity {
         emailMyPerfil = findViewById(R.id.emailMyPerfil);
         statusMyPerfil = findViewById(R.id.statusMyPerfil);
         rvConvites = findViewById(R.id.rvConvites);
+        ic_sair = findViewById(R.id.ic_sair);
         llLost = findViewById(R.id.layoutLostConvites);
 
         progressDialogFoto = new ProgressDialog(this);
@@ -106,6 +108,13 @@ public class MyPerfilActivity extends AppCompatActivity {
             startActivity(new Intent(this,HomeActivity.class));
         }
 
+        ic_sair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(v.getContext(), LoginActivity.class));
+            }
+        });
 
     }
     private void selecionarFoto() {

@@ -86,27 +86,54 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
         }
 
         private void setDados(final Mensagem mensagem) {
-            FirebaseFirestore.getInstance().collection("/mensagens")
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                            List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                            for (DocumentSnapshot doc : docs) {
-                                Mensagem mensagem1 = doc.toObject(Mensagem.class);
-                                if(mensagem1.getIdMensagem().equals(mensagem.getIdMensagem())){
-                                    //colocar a foto aqui
-                                    txtMensagemRemetente.setText(mensagem.getConteudo());
-                                    Picasso.get().load(mensagem.getUrlFotoDono()).into(imgPerfilRemetente);
-                                    if(!mensagem1.getIdUserRemetente().equals(FirebaseAuth.getInstance().getUid())){
-                                        ctLayout.setBackgroundColor(Color.parseColor("#B0E0E6"));
-                                    }else{
-                                        ctLayout.setBackgroundColor(Color.parseColor("#90EE90"));
+            if(mensagem.getTipoMsg() == null){
+                return;
+            }
+            if(mensagem.getTipoMsg().equals("user")) {
+                FirebaseFirestore.getInstance().collection("/mensagens")
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                for (DocumentSnapshot doc : docs) {
+                                    Mensagem mensagem1 = doc.toObject(Mensagem.class);
+                                    if (mensagem1.getIdMensagem().equals(mensagem.getIdMensagem())) {
+                                        //colocar a foto aqui
+                                        txtMensagemRemetente.setText(mensagem.getConteudo());
+                                        Picasso.get().load(mensagem.getUrlFotoDono()).into(imgPerfilRemetente);
+                                        if (!mensagem1.getIdUserRemetente().equals(FirebaseAuth.getInstance().getUid())) {
+                                            ctLayout.setBackgroundColor(Color.parseColor("#B0E0E6"));
+                                        } else {
+                                            ctLayout.setBackgroundColor(Color.parseColor("#90EE90"));
+                                        }
                                     }
                                 }
                             }
-                        }
-                    });
+                        });
+            }else if(mensagem.getTipoMsg().equals("grupo")){
+                FirebaseFirestore.getInstance().collection("/mensagensGrupos")
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                for (DocumentSnapshot doc : docs) {
+                                    Mensagem mensagem1 = doc.toObject(Mensagem.class);
+                                    if (mensagem1.getIdMensagem().equals(mensagem.getIdMensagem())) {
+                                        //colocar a foto aqui
+                                        txtMensagemRemetente.setText(mensagem.getConteudo());
+                                        Picasso.get().load(mensagem.getUrlFotoDono()).into(imgPerfilRemetente);
+                                        if (mensagem1.getIdUserRemetente().equals(FirebaseAuth.getInstance().getUid())) {
+                                            ctLayout.setBackgroundColor(Color.parseColor("#90EE90"));
+                                        } else {
+                                            ctLayout.setBackgroundColor(Color.parseColor("#B0E0E6"));
+                                        }
+                                    }
+                                }
+                            }
+                        });
+            }
         }
     }
 }

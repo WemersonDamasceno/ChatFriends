@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.MyPerfilActivity">
 
     <RelativeLayout
+        android:id="@+id/rlFotoPerfil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgPerfilPerfil"
             android:layout_width="80dp"
@@ -30,12 +31,21 @@
             android:src="@drawable/ic_camera" />
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/ic_sair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_sair"
+        android:layout_alignEnd="@id/rlFotoPerfil"/>
+
     <TextView
         android:id="@+id/userMyPerfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Wemerson Monteiro"
         android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rlFotoPerfil"
         android:layout_marginTop="20dp"
         android:textSize="17sp"
         android:textColor="@color/colorPreto"
@@ -43,9 +53,12 @@
 
     <TextView
         android:id="@+id/statusMyPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_below="@+id/userMyPerfil"
+        android:layout_height="45dp"
+        android:textAlignment="center"
         android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
         android:text="Status"
         android:textColor="@color/colorPreto"
         android:textStyle="italic"
@@ -54,15 +67,19 @@
     <TextView
         android:id="@+id/emailMyPerfil"
         android:layout_width="wrap_content"
+        android:layout_below="@+id/statusMyPerfil"
         android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:text="wemersondamasceno7@gmail.com"
         android:layout_gravity="center"
         android:textColor="@color/colorPreto"/>
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/emailMyPerfil"
         android:textColor="@color/colorPreto"
         android:text="Convites Pendentes"
         android:layout_marginTop="20dp"/>
@@ -70,9 +87,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvConvites"
         android:background="#eee"
+        android:layout_below="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="10dp">
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
@@ -80,6 +98,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="5dp"
         android:visibility="gone">
         <ImageView
             android:layout_width="wrap_content"
@@ -103,4 +123,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>
