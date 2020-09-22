@@ -126,7 +126,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         mensagem.setIdUserRemetente(usuarioEu.getIdUser());
         mensagem.setIdUserDestinatario(grupo.getIdGrupo());
         mensagem.setUrlFotoDono(usuarioEu.getUrlFoto());
-        mensagem.setIfLeft(true); //se a msg for minha fica na direita
+        mensagem.setIfLeft(false); //se a msg for minha fica na direita
 
         long milles = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(milles);
