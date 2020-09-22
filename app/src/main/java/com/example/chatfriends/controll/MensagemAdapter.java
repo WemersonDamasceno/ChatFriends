@@ -48,7 +48,7 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
 
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolderMensagem holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolderMensagem holder, final int position) {
         holder.setDados(mensagemList.get(position));
     }
 
@@ -86,6 +86,7 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
         }
 
         private void setDados(final Mensagem mensagem) {
+            if(mensagem.isIfLeft()){ //vou mudar isso para a mensagem ter um atributo se for do grupo ou nao
             FirebaseFirestore.getInstance().collection("/mensagens")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @SuppressLint("SetTextI18n")
@@ -107,6 +108,29 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
                             }
                         }
                     });
+            }else {
+                FirebaseFirestore.getInstance().collection("/mensagensGrupos")
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                for (DocumentSnapshot doc : docs) {
+                                    Mensagem mensagem1 = doc.toObject(Mensagem.class);
+                                    if(mensagem1.getIdMensagem().equals(mensagem.getIdMensagem())){
+                                        //colocar a foto aqui
+                                        txtMensagemRemetente.setText(mensagem.getConteudo());
+                                        Picasso.get().load(mensagem.getUrlFotoDono()).into(imgPerfilRemetente);
+                                        if(!mensagem1.getIdUserRemetente().equals(FirebaseAuth.getInstance().getUid())){
+                                            ctLayout.setBackgroundColor(Color.parseColor("#B0E0E6"));
+                                        }else{
+                                            ctLayout.setBackgroundColor(Color.parseColor("#90EE90"));
+                                        }
+                                    }
+                                }
+                            }
+                        });
+            }
         }
     }
 }

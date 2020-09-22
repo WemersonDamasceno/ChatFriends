@@ -60,6 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
+        android:layout_marginBottom="10dp"
         android:layout_below="@+id/tollbarPagInicial"
         app:layout_constraintBottom_toTopOf="@+id/etMensagem"
         app:layout_constraintEnd_toEndOf="parent"
