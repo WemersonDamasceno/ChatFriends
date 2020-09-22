@@ -172,7 +172,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
     }
 
     private void buscarMsgUsersInGrupo() {
-        Toast.makeText(this, "Bora codificar meu fi kkk", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Bora codificar meu fi kkk", Toast.LENGTH_LONG).show();
     }
 
 }
