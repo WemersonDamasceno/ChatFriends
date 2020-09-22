@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +18,8 @@ import com.example.chatfriends.R;
 import com.example.chatfriends.model.Grupo;
 import com.example.chatfriends.model.Usuario;
 import com.example.chatfriends.view.TrocaMensagensActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -104,11 +105,41 @@ public class GruposAdapter extends RecyclerView.Adapter<GruposAdapter.ViewHolder
             ivEntrarGrupo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext, "Você já esta no grupo", Toast.LENGTH_SHORT).show();
+                    FirebaseFirestore.getInstance().collection("/grupos")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                    for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                                        Grupo grupo = doc.toObject(Grupo.class);
+                                        if(grupo.getIdGrupo().equals(gruposList.get(getAdapterPosition()).getIdGrupo())){
+                                            List<String> idUsers = grupo.getIdUsersGrupo();
+                                            idUsers.add(FirebaseAuth.getInstance().getUid());
+                                            updateGrupo(doc,idUsers);
+                                        }
+                                    }
+                                }
+                            });
                 }
             });
 
 
+        }
+
+        private void updateGrupo(DocumentSnapshot doc, List<String> idUsers) {
+            FirebaseFirestore.getInstance().collection("/grupos")
+                    .document(doc.getId())
+                    .update("idUsersGrupo", idUsers)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.i("teste","Sucess ao add no grupo");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("teste","Erro ao add no grupo: "+e.getMessage());
+                }
+            });
         }
 
 
@@ -120,19 +151,19 @@ public class GruposAdapter extends RecyclerView.Adapter<GruposAdapter.ViewHolder
         private void setDados(final Grupo grupo) {
             FirebaseFirestore.getInstance().collection("/grupos")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @SuppressLint("SetTextI18n")
                         @Override
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                             List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot doc : docs) {
-                                Grupo grupos = doc.toObject(Grupo.class);
-                                if(grupos.getIdGrupo().equals(gruposList.get(getAdapterPosition()).getIdGrupo())) {
-                                    nomeGrupo.setText(grupos.getNomeGrupo());
-                                    String desc = grupo.getDescricaoGrupo();
-                                    descGrupo.setText(desc.substring(0,30)+"...");
-                                    Picasso.get().load(grupos.getUrlFotoGrupo()).into(fotoGrupo);
+                                Grupo grupo1 = doc.toObject(Grupo.class);
+                                if(grupo1.getIdGrupo().equals(grupo.getIdGrupo())){
+                                    nomeGrupo.setText(grupo1.getNomeGrupo());
+                                    Picasso.get().load(grupo.getUrlFotoGrupo()).into(fotoGrupo);
+                                    descGrupo.setText(grupo.getDescricaoGrupo());
+                                    if(grupo1.getIdUsersGrupo().contains(FirebaseAuth.getInstance().getUid())){
+                                        ivEntrarGrupo.setVisibility(View.GONE);
+                                    }
                                 }
-
                             }
                         }
                     });

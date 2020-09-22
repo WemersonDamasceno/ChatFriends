@@ -17,6 +17,28 @@ public class Grupo implements Parcelable {
     public Grupo() {
     }
 
+    protected Grupo(Parcel in) {
+        idGrupo = in.readString();
+        nomeGrupo = in.readString();
+        idUserAdminGrupo = in.readString();
+        idUsersGrupo = in.createStringArrayList();
+        descricaoGrupo = in.readString();
+        privacidadeGrupo = in.readByte() != 0;
+        urlFotoGrupo = in.readString();
+    }
+
+    public static final Creator<Grupo> CREATOR = new Creator<Grupo>() {
+        @Override
+        public Grupo createFromParcel(Parcel in) {
+            return new Grupo(in);
+        }
+
+        @Override
+        public Grupo[] newArray(int size) {
+            return new Grupo[size];
+        }
+    };
+
     public String getIdGrupo() {
         return idGrupo;
     }
@@ -82,28 +104,6 @@ public class Grupo implements Parcelable {
         this.privacidadeGrupo = privacidadeGrupo;
         this.urlFotoGrupo = urlFotoGrupo;
     }
-
-    protected Grupo(Parcel in) {
-        idGrupo = in.readString();
-        nomeGrupo = in.readString();
-        idUserAdminGrupo = in.readString();
-        idUsersGrupo = in.createStringArrayList();
-        descricaoGrupo = in.readString();
-        privacidadeGrupo = in.readByte() != 0;
-        urlFotoGrupo = in.readString();
-    }
-
-    public static final Creator<Grupo> CREATOR = new Creator<Grupo>() {
-        @Override
-        public Grupo createFromParcel(Parcel in) {
-            return new Grupo(in);
-        }
-
-        @Override
-        public Grupo[] newArray(int size) {
-            return new Grupo[size];
-        }
-    };
 
     @Override
     public int describeContents() {

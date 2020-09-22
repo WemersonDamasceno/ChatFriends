@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -156,7 +157,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
         String nomeGrupo = etNomeGrupoAdd.getText().toString();
         String idUserAdmin = usuarioEu.getIdUser();
         List<String> idUsersGrupo = new ArrayList<>();
-        idUsersGrupo.add(usuarioEu.getIdUser());
+        idUsersGrupo.add(FirebaseAuth.getInstance().getUid());
         String descricaoGrupo = descricaoGrupoAdd.getText().toString();
         boolean privacidadeGrupo = cbPrivacidadeGrupoAdd.isChecked();
         if(grupo.getUrlFotoGrupo() == null || grupo.getUrlFotoGrupo().equals("")){

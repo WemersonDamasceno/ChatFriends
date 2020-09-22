@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,9 +66,6 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         rvMensagens.setAdapter(mensagemAdapter);
 
 
-        mensagemAdapter.getMensagemList().clear();
-        buscarMensagens();
-
         //Receber pessoa ou grupo
         Intent intent = getIntent();
         try{
@@ -77,12 +74,16 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                 grupo = intent.getParcelableExtra("grupoMensagem");
                 Picasso.get().load(grupo.getUrlFotoGrupo()).into(ic_foto_perfil_tela_mensg);
                 txtNomeMensagem.setText(grupo.getNomeGrupo());
+                //buscarMensagens do grupo();
+                buscarMsgUsersInGrupo();
             }
             if(intent.getParcelableExtra("userMensagem") != null){
                 usuarioEu = intent.getParcelableExtra("userEuMensagem");
                 usuarioAmigo = intent.getParcelableExtra("userMensagem");
                 Picasso.get().load(usuarioAmigo.getUrlFoto()).into(ic_foto_perfil_tela_mensg);
                 txtNomeMensagem.setText(usuarioAmigo.getNome());
+                mensagemAdapter.getMensagemList().clear();
+                buscarMsgUsersInUsers();
             }
         }catch (Exception e){
             Log.i("teste","Erro ao receber user: "+e.getMessage());
@@ -125,6 +126,8 @@ public class TrocaMensagensActivity extends AppCompatActivity {
 
     }
 
+
+
     private void salvarMensagem(Mensagem mensagem) {
         FirebaseFirestore.getInstance().collection("/mensagens")
                 .add(mensagem)
@@ -141,7 +144,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         });
     }
 
-    private void buscarMensagens() {
+    private void buscarMsgUsersInUsers() {
         FirebaseFirestore.getInstance().collection("/mensagens")
                 .orderBy("data_hora")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -155,6 +158,8 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                             Mensagem mensg = doc.toObject(Mensagem.class);
                             if(mensg.getIdUserDestinatario().equals(usuarioEu.getIdUser())
                             || mensg.getIdUserRemetente().equals(usuarioEu.getIdUser())){
+                                //ta dando erro aqui quando abro a pagina pra troca de mensagens do grupo
+                                //pq esse coiso aqui é pra pegar mensagens só de amigos....
                                 if(mensg.getIdUserDestinatario().equals(usuarioAmigo.getIdUser())
                                         || mensg.getIdUserRemetente().equals(usuarioAmigo.getIdUser())){
                                     mensagemAdapter.add(mensg);
@@ -165,4 +170,9 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void buscarMsgUsersInGrupo() {
+        Toast.makeText(this, "Bora codificar meu fi kkk", Toast.LENGTH_SHORT).show();
+    }
+
 }
