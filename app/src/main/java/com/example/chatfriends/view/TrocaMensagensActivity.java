@@ -22,6 +22,7 @@ import com.example.chatfriends.model.Mensagem;
 import com.example.chatfriends.model.Usuario;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 public class TrocaMensagensActivity extends AppCompatActivity {
@@ -61,10 +63,11 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         layoutManager.setReverseLayout(false);
+        layoutManager.setStackFromEnd(true);
 
         rvMensagens.setLayoutManager(layoutManager);
         rvMensagens.setAdapter(mensagemAdapter);
-
+        rvMensagens.scrollToPosition(mensagemAdapter.getItemCount()-1);
 
         //Receber pessoa ou grupo
         Intent intent = getIntent();
@@ -82,7 +85,6 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                 usuarioAmigo = intent.getParcelableExtra("userMensagem");
                 Picasso.get().load(usuarioAmigo.getUrlFoto()).into(ic_foto_perfil_tela_mensg);
                 txtNomeMensagem.setText(usuarioAmigo.getNome());
-                mensagemAdapter.getMensagemList().clear();
                 buscarMsgUsersInUsers();
             }
         }catch (Exception e){
@@ -154,16 +156,21 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                             Log.i("teste",e.getMessage());
                             return;
                         }
-                        for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
-                            Mensagem mensg = doc.toObject(Mensagem.class);
-                            if(mensg.getIdUserDestinatario().equals(usuarioEu.getIdUser())
-                            || mensg.getIdUserRemetente().equals(usuarioEu.getIdUser())){
-                                //ta dando erro aqui quando abro a pagina pra troca de mensagens do grupo
-                                //pq esse coiso aqui é pra pegar mensagens só de amigos....
-                                if(mensg.getIdUserDestinatario().equals(usuarioAmigo.getIdUser())
-                                        || mensg.getIdUserRemetente().equals(usuarioAmigo.getIdUser())){
-                                    mensagemAdapter.add(mensg);
-                                    mensagemAdapter.notifyDataSetChanged();
+                        List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
+                        if(documentChanges != null){
+                            for(DocumentChange doc : documentChanges){
+                                if(doc.getType() == DocumentChange.Type.ADDED){
+                                    Mensagem mensg = doc.getDocument().toObject(Mensagem.class);
+                                    if(mensg.getIdUserDestinatario().equals(usuarioEu.getIdUser())
+                                            || mensg.getIdUserRemetente().equals(usuarioEu.getIdUser())){
+                                        //ta dando erro aqui quando abro a pagina pra troca de mensagens do grupo
+                                        //pq esse coiso aqui é pra pegar mensagens só de amigos....
+                                        if(mensg.getIdUserDestinatario().equals(usuarioAmigo.getIdUser())
+                                                || mensg.getIdUserRemetente().equals(usuarioAmigo.getIdUser())){
+                                            mensagemAdapter.add(mensg);
+                                            mensagemAdapter.notifyDataSetChanged();
+                                        }
+                                    }
                                 }
                             }
                         }

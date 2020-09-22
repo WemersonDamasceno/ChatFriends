@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.TrocaMensagensActivity">
+    tools:context=".view.TrocaMensagensActivity"
+    android:background="@drawable/fundomsg">
 
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tollbarPagInicial"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-
+        android:gravity="top"
+        android:elevation="40dp"
         android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -57,6 +59,7 @@
         android:id="@+id/rvMensagens"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
         android:layout_below="@+id/tollbarPagInicial"
         app:layout_constraintBottom_toTopOf="@+id/etMensagem"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,6 +87,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_send"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
