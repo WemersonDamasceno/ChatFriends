@@ -150,7 +150,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
     }
 
     private void criarGrupo() {
-        progressDialogAdd.setTitle("Criando grupo...");
+        progressDialogAdd.setMessage("Criando grupo...");
         progressDialogAdd.show();
 
         String idGrupo = UUID.randomUUID().toString();
@@ -194,6 +194,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 progressDialogAdd.dismiss();
                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
             }
         });
     }

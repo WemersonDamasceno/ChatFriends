@@ -113,6 +113,7 @@ public class MyPerfilActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(v.getContext(), LoginActivity.class));
+                finish();
             }
         });
 
@@ -135,7 +136,7 @@ public class MyPerfilActivity extends AppCompatActivity {
         }
     }
     private void enviarFoto(Uri selectedImage) {
-        progressDialogFoto.setTitle("Enviando sua foto...");
+        progressDialogFoto.setMessage("Enviando sua foto...");
         progressDialogFoto.show();
 
         //Arrumar esse upload da foto
@@ -188,7 +189,7 @@ public class MyPerfilActivity extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Log.i("teste","Update sucess");
+                                                Log.i("teste","Update url foto sucesso");
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -220,7 +221,6 @@ public class MyPerfilActivity extends AppCompatActivity {
                         if (conviteAdapter.getSize() == 0) {
                             llLost.setVisibility(View.VISIBLE);
                         }
-                        Log.i("teste", "tam: " + conviteAdapter.getSize());
                     }
                 });
 

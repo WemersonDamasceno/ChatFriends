@@ -40,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if(FirebaseAuth.getInstance().getUid() == null){
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
 
         ActionBar bar = getSupportActionBar();

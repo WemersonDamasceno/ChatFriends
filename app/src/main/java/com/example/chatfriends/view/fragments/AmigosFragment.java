@@ -72,8 +72,6 @@ public class AmigosFragment extends Fragment {
         return view;
     }
 
-    //Trocar a parte de amigos conter um user para conter apenas o id do user;
-
     private void encontrarUser() {
         FirebaseFirestore.getInstance().collection("/users")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -101,17 +99,18 @@ public class AmigosFragment extends Fragment {
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
                             Amigos amigos = doc.toObject(Amigos.class);
-                            final String amigo1 = amigos.getUser1Id();
-                            final String amigo2 = amigos.getUser2Id();
+                            final String idAmigo1 = amigos.getUser1Id();
+                            final String idAmigo2 = amigos.getUser2Id();
+
                             FirebaseFirestore.getInstance().collection("/users")
                                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
                                         public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
                                             for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
                                                 Usuario user = doc.toObject(Usuario.class);
-                                                if(amigo1.equals(usuarioEu.getIdUser())){
-                                                    if(!amigosAdapter.getAmigosListIds().contains(amigo2)) {
-                                                        amigosAdapter.add(amigo2);
+                                                if(idAmigo1.equals(usuarioEu.getIdUser())){
+                                                    if(!amigosAdapter.getAmigosListIds().contains(idAmigo2)) {
+                                                        amigosAdapter.add(idAmigo2);
                                                         amigosAdapter.notifyDataSetChanged();
                                                     }
                                                 }

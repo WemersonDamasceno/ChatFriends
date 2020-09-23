@@ -134,20 +134,7 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                                 if(convite.getUserQuemRecebeu().getIdUser().equals(userEu.getIdUser())){
                                     if(convite.getUserQuemEnviou().getIdUser().
                                             equals(conviteList.get(getAdapterPosition()))){
-                                        upConvite(doc);
-                                        //salvar em amigos
-                                        FirebaseFirestore.getInstance().collection("/users")
-                                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                                        for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
-                                                            Usuario user = doc.toObject(Usuario.class);
-                                                            if(user.getIdUser().equals(conviteList.get(getAdapterPosition()))){
-                                                                salvarAmigos(userEu, user);
-                                                            }
-                                                        }
-                                                    }
-                                                });
+                                        upConvite(doc, userEu, conviteList);
                                     }
                                 }
                             }
@@ -155,7 +142,7 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                     });
         }
 
-        private void upConvite(DocumentSnapshot doc) {
+        private void upConvite(DocumentSnapshot doc, final Usuario userEu, final List<String> conviteList) {
             FirebaseFirestore.getInstance().collection("/convites")
                     .document(doc.getId())
                     .update("foiAceito",true)
@@ -169,13 +156,33 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                 public void onFailure(@NonNull Exception e) {
                     Log.i("teste","Erro ao update convite: "+e.getMessage());
                 }
+            }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    //salvar em amigos
+                    buscarDoisUsers(userEu, conviteList);
+                }
             });
+        }
+
+        private void buscarDoisUsers(final Usuario userEu, final List<String> conviteList) {
+            FirebaseFirestore.getInstance().collection("/users")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                            for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                                Usuario user = doc.toObject(Usuario.class);
+                                if(user.getIdUser().equals(conviteList.get(getAdapterPosition()))){
+                                    salvarAmigos(userEu, user);
+                                }
+                            }
+                        }
+                    });
         }
 
         private void salvarAmigos(final Usuario userEu, final Usuario usuarioAmigo) {
             incrementarQtdAmigos(userEu,usuarioAmigo);
             Amigos amigos = new Amigos(userEu.getIdUser(),usuarioAmigo.getIdUser(), UUID.randomUUID().toString());
-
             //Enviar essa parte pro completed do update
             FirebaseFirestore.getInstance().collection("/amigos")
                     .add(amigos)
@@ -187,7 +194,7 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                     }).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
-                    getContext.startActivity(new Intent(getContext,HomeActivity.class));
+                    //getContext.startActivity(new Intent(getContext,HomeActivity.class));
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -195,15 +202,6 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                     Toast.makeText(getContext, "Erro..."+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-            FirebaseFirestore.getInstance().terminate().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-
-                }
-            });
-
-
         }
 
         private void incrementarQtdAmigos(final Usuario userEu, final Usuario usuarioAmigo) {
@@ -237,7 +235,18 @@ public class ConviteAdapter extends RecyclerView.Adapter<ConviteAdapter.ViewHold
                         public void onSuccess(Void aVoid) {
                             Log.i("teste", "Upload sucess");
                         }
+                    }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    FirebaseFirestore.getInstance().terminate().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
                     });
+                    getContext.startActivity(new Intent(getContext,HomeActivity.class));
+                }
+            });
         }
 
 

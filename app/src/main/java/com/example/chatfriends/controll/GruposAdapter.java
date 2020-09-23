@@ -111,10 +111,12 @@ public class GruposAdapter extends RecyclerView.Adapter<GruposAdapter.ViewHolder
                                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                                     for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
                                         Grupo grupo = doc.toObject(Grupo.class);
-                                        if(grupo.getIdGrupo().equals(gruposList.get(getAdapterPosition()).getIdGrupo())){
-                                            List<String> idUsers = grupo.getIdUsersGrupo();
-                                            idUsers.add(FirebaseAuth.getInstance().getUid());
-                                            updateGrupo(doc,idUsers);
+                                        if(gruposList.get(getAdapterPosition()) != null) {
+                                            if (grupo.getIdGrupo().equals(gruposList.get(getAdapterPosition()).getIdGrupo())) {
+                                                List<String> idUsers = grupo.getIdUsersGrupo();
+                                                idUsers.add(FirebaseAuth.getInstance().getUid());
+                                                updateGrupo(doc, idUsers);
+                                            }
                                         }
                                     }
                                 }

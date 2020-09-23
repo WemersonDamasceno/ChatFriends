@@ -137,4 +137,3 @@ public class MensagemAdapter extends RecyclerView.Adapter<MensagemAdapter.ViewHo
         }
     }
 }
-

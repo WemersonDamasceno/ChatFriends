@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +20,10 @@ import com.example.chatfriends.controll.MensagemAdapter;
 import com.example.chatfriends.model.Grupo;
 import com.example.chatfriends.model.Mensagem;
 import com.example.chatfriends.model.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -87,7 +87,7 @@ public class TrocaMensagensActivity extends AppCompatActivity {
             if(intent.getParcelableExtra("userMensagem") != null){
                 usuarioEu = intent.getParcelableExtra("userEuMensagem");
                 usuarioAmigo = intent.getParcelableExtra("userMensagem");
-                Log.i("teste","Usuario");
+                Log.i("teste","Usuario "+usuarioAmigo.getNome());
                 Picasso.get().load(usuarioAmigo.getUrlFoto()).into(ic_foto_perfil_tela_mensg);
                 txtNomeMensagem.setText(usuarioAmigo.getNome());
                 buscarMsgUsersInUsers();
@@ -109,13 +109,14 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                 if(etMensagem.getText().toString().equals("")){
                     etMensagem.setError("Digite uma mensagem....");
                 }else
-                    if(usuarioAmigo != null){
-                        criarMensagemUsuario();
-                    }
-                    else
-                    if(grupo != null){
-                        criarMensagemGrupo();
-                    }
+                if(usuarioAmigo != null){
+                    criarMensagemUsuario();
+                    Log.i("teste","Enviar msg p: "+usuarioAmigo.getNome());
+                }
+                else
+                if(grupo != null){
+                    criarMensagemGrupo();
+                }
             }
         });
 
@@ -135,11 +136,9 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         long milles = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(milles);
         mensagem.setData_hora(timestamp.toString());
-        Log.i("teste","Criou a mensagem");
+        Log.i("teste","Criou a mensagem grupo");
         salvarMensagem(mensagem);
         etMensagem.setText("");
-        //atualizar a ultima mensagem dos dois usuarios
-        //recreate();
         notificacaoToque.start();
     }
 
@@ -156,16 +155,14 @@ public class TrocaMensagensActivity extends AppCompatActivity {
         long milles = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(milles);
         mensagem.setData_hora(timestamp.toString());
-        Log.i("teste","Criou a mensagem");
+        Log.i("teste","Criou a mensagem usuario p: "+usuarioAmigo.getNome());
         salvarMensagem(mensagem);
         etMensagem.setText("");
-        //atualizar a ultima mensagem dos dois usuarios
-        //recreate();
         notificacaoToque.start();
     }
 
 
-    private void salvarMensagem(Mensagem mensagem) {
+    private void salvarMensagem(final Mensagem mensagem) {
         //salvar Mensagem grupo
         if(grupo != null){
             FirebaseFirestore.getInstance().collection("/mensagensGrupos")
@@ -181,22 +178,55 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                     Log.i("teste","Falha ao salvar msg grupo: "+e.getMessage());
                 }
             });
-        //salvar mensg usuario
-        }else if(usuarioEu != null) {
+            //salvar mensg usuario
+        }else if(usuarioAmigo != null) {
             FirebaseFirestore.getInstance().collection("/mensagens")
-                    .add(mensagem)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.i("teste", "enviado a mensagem");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.i("teste", "falha ao enviar mensagem: " + e.getMessage());
-                }
-            });
+                .add(mensagem)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.i("teste","msg usuario salva no banco");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("teste","Falha ao salvar msg usuario: "+e.getMessage());
+                    }
+                });
+                //ver isso depois pq da um bug ?
+                updateLastMensg(mensagem, usuarioEu, usuarioAmigo);
         }
+        recreate();
+    }
+
+    private void updateLastMensg(final Mensagem mensagem, final Usuario usuarioEu, final Usuario usuarioAmigo) {
+        FirebaseFirestore.getInstance().collection("/users")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                            Usuario user = doc.toObject(Usuario.class);
+                            if(user.getIdUser().equals(usuarioEu.getIdUser())){
+                                updateMens(mensagem, doc);
+                            }
+                            if(user.getIdUser().equals(usuarioAmigo.getIdUser())){
+                                updateMens(mensagem, doc);
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void updateMens(final Mensagem mensagem, DocumentSnapshot doc) {
+        FirebaseFirestore.getInstance().collection("/users")
+                .document(doc.getId())
+                .update("lastMensagem", mensagem)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("teste","update mensagem sucess");
+                    }
+                });
     }
 
     private void buscarMsgUsersInUsers() {
@@ -216,8 +246,6 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                                     Mensagem mensg = doc.getDocument().toObject(Mensagem.class);
                                     if(mensg.getIdUserDestinatario().equals(usuarioEu.getIdUser())
                                             || mensg.getIdUserRemetente().equals(usuarioEu.getIdUser())){
-                                        //ta dando erro aqui quando abro a pagina pra troca de mensagens do grupo
-                                        //pq esse coiso aqui é pra pegar mensagens só de amigos....
                                         if(mensg.getIdUserDestinatario().equals(usuarioAmigo.getIdUser())
                                                 || mensg.getIdUserRemetente().equals(usuarioAmigo.getIdUser())){
                                             mensagemAdapter.add(mensg);
@@ -248,8 +276,8 @@ public class TrocaMensagensActivity extends AppCompatActivity {
                                     Mensagem mensg = doc.getDocument().toObject(Mensagem.class);
                                     //Se essa msg pertence ao grupo
                                     if(mensg.getIdUserDestinatario().equals(grupo.getIdGrupo())){
-                                            mensagemAdapter.add(mensg);
-                                            mensagemAdapter.notifyDataSetChanged();
+                                        mensagemAdapter.add(mensg);
+                                        mensagemAdapter.notifyDataSetChanged();
                                     }
                                 }
                             }

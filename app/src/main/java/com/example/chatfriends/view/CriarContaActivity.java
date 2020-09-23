@@ -46,8 +46,7 @@ public class CriarContaActivity extends AppCompatActivity {
         btnCCCriarConta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setTitle("Aguarde um instante...");
-                progressDialog.setMessage("Estamos criando sua conta.");
+                progressDialog.setMessage("Criando sua conta.");
                 progressDialog.show();
                 String email = emailUserCriarConta.getText().toString();
                 String senha = senhaUserCriarConta.getText().toString();
